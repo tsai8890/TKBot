@@ -1,0 +1,10 @@
+# Environments
+.env
+
+
+# Python Cache
+__pycache__
+
+
+# config
+config/book_config.csv
