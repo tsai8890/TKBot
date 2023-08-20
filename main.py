@@ -1,3 +1,6 @@
+import sys
+sys.dont_write_bytecode = True
+
 import json
 import PySimpleGUI as sg
 from datetime import datetime

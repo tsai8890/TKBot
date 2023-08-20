@@ -9,8 +9,7 @@ import os
 import time
 from dotenv import load_dotenv
 
-from src.tkb_layout import *
-from src.globals import *
+from src.tkb_agent.tkb_layout import *
 
 
 class TKB_Agent:

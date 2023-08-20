@@ -1,1 +1,0 @@
-CHROME_DRIVER_PATH = '/Users/ninesun/Documents/projects/tkb_booking/chrome_driver/chromeDriver.app/Contents/MacOS/Google Chrome for Testing'
