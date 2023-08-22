@@ -66,7 +66,7 @@ class TKB_Agent:
         self.handle_alert(self.driver)
 
 
-    def book(self, op_timeout=0.3):
+    def book(self, op_timeout=0):
         # Select the subject
         time.sleep(op_timeout)
         subject_select = Select(self.driver.find_element(By.XPATH, SUBJECT_SELECT))
@@ -100,15 +100,13 @@ class TKB_Agent:
         
         # Submit the form
         self.driver.find_element(By.XPATH, BOOK_BUTTON).click()
-        
         self.wait_alert(self.driver)
         self.handle_alert(self.driver)
 
         # Successfully booked
         self.wait_alert(self.driver)
         self.handle_alert(self.driver)
-
-        time.sleep(30)
+        self.driver.save_screenshot(f'booking_success.png')
         return reserve_success, reserve_session
 
     
