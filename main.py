@@ -1,6 +1,7 @@
 import sys
 sys.dont_write_bytecode = True
 
+import os
 import json
 import PySimpleGUI as sg
 from datetime import datetime
@@ -42,20 +43,20 @@ def main():
         if event == sg.WIN_CLOSED or event == 'Exit':
             break
         
-        if not reserved:
-            if event == 'Reserve':
-                tkb_agent.set_tkb_info(
-                    values['subject'],
-                    values['classroom'],
-                    [session for session in tkb_data['sessions']['(6)新莊中正數位學堂'] if values[session]]
-                )
-                window['waiting'].update(visible=True)
-                reserved = True
+        if event == 'Reserve':
+            tkb_agent.set_tkb_info(
+                values['subject'],
+                values['classroom'],
+                [session for session in tkb_data['sessions']['(6)新莊中正數位學堂'] if values[session]]
+            )
+            window['waiting'].update(visible=True)
+            reserved = True
 
-                print('==== 預約 TKB 數位學堂 ====')
-                print(f'科目: {tkb_agent.subject}')
-                print(f'上課地點: {tkb_agent.classroom}')
-                print(f'上課時間: {tkb_agent.sessions}')
+            os.system('clear')
+            print('==== 預約 TKB 數位學堂 ====')
+            print(f'科目: {tkb_agent.subject}')
+            print(f'上課地點: {tkb_agent.classroom}')
+            print(f'上課時間: {tkb_agent.sessions}')
 
         if reserved:
             if after(midnight):
