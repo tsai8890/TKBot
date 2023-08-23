@@ -47,7 +47,7 @@ def main():
                 tkb_agent.set_tkb_info(
                     values['subject'],
                     values['classroom'],
-                    [values['sessions']]
+                    [session for session in tkb_data['sessions']['(6)新莊中正數位學堂'] if values[session]]
                 )
                 window['waiting'].update(visible=True)
                 reserved = True
@@ -59,11 +59,11 @@ def main():
 
         if reserved:
             if after(midnight):
-                success, session = tkb_agent.book()
-                if success:
-                    print(f'預約成功: {session}')
+                reserved_sessions = tkb_agent.book()
+                if len(reserved_sessions) != 0:
+                    print(f'預約成功: {reserved_sessions}')
                 else:
-                    print(f'預約失敗: {session} 已經額滿')
+                    print(f'預約失敗: 已經全數額滿')
                 break
 
     window.close()

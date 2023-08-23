@@ -22,7 +22,7 @@ class TKB_Agent:
 
     def init_driver(self):
         opts = Options()
-        opts.add_argument("--incognito")
+        # opts.add_argument("--incognito")
         ua = "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:53.0) Gecko/20100101 Firefox/53.0"
         opts.add_argument("user-agent={}".format(ua))
         self.driver = webdriver.Chrome(options=opts)
@@ -84,19 +84,16 @@ class TKB_Agent:
 
         # Select the session
         time.sleep(op_timeout)
-        reserve_success, reserve_session = False, ''
+        self.wait_value(self.driver, By.ID, SESSION_TIME_DIV_ID)
 
-        sessions_id = [int(session.split(')')[0].strip('(')) for session in self.sessions]
-        for session in sessions_id:
+        sessions_text = self.driver.find_element(By.ID, SESSION_TIME_DIV_ID).get_attribute('innerText')
+        sessions_to_reserve = [int(session.split(')')[0].strip('(')) for session in self.sessions]
+        reserved_sessions = []
+        for session in sessions_to_reserve:
             session_box = self.driver.find_elements(By.NAME, SESSION_TIME_NAME)[session-1]
             if session_box.get_attribute('disabled') is None:
                 session_box.click()
-                reserve_success = True
-
-                self.wait_value(self.driver, By.ID, SESSION_TIME_DIV_ID)
-                sessions = self.driver.find_element(By.ID, SESSION_TIME_DIV_ID).get_attribute('innerText')
-                reserve_session = sessions.split('\n')[session-1]
-                break
+                reserved_sessions.append(sessions_text.split('\n')[session-1])
         
         # Submit the form
         self.driver.find_element(By.XPATH, BOOK_BUTTON).click()
@@ -107,7 +104,7 @@ class TKB_Agent:
         self.wait_alert(self.driver)
         self.handle_alert(self.driver)
         self.driver.save_screenshot(f'booking_success.png')
-        return reserve_success, reserve_session
+        return reserved_sessions
 
     
     def wait_value(self, driver, by_value, element_value, timeout=10):
@@ -115,7 +112,7 @@ class TKB_Agent:
 
 
     def wait_alert(self, driver):
-        WebDriverWait(driver, 10).until(EC.alert_is_present())
+        WebDriverWait(driver, 10000).until(EC.alert_is_present())
         
 
     def handle_alert(self, driver, accept=True):
