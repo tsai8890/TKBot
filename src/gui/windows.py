@@ -3,10 +3,6 @@ import json
 from datetime import date, timedelta
 
 
-def empty_block(size=(15,1)):
-    return sg.Text('', size=size)
-
-
 def create_window():
     tkb_data = None
     with open('src/gui/tkb_data.json') as file:
