@@ -1,5 +1,8 @@
 HOME_PAGE = 'https://www.tkblearning.com.tw/index'
 
+LOGIN_STATUS_BUTTON = '/html/body/div[3]/div[1]/div/div[3]'
+LOGIN_STATUS_TEXT = '/html/body/div[3]/div[1]/div/div[3]/a'
+
 LOGIN_BUTTON = '/html/body/div[2]/section/div/div[3]/a[1]'
 FIELD_USERNAME = '//*[@id="id"]'
 FIELD_PASSWORD = '//*[@id="pwd"]'
