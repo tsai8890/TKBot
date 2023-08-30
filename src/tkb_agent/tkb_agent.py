@@ -7,6 +7,7 @@ from selenium.webdriver.support.ui import Select
 
 import os
 import time
+import json
 from dotenv import load_dotenv
 
 from src.tkb_agent.tkb_layout import *
@@ -28,12 +29,28 @@ class TKB_Agent:
         self.driver = webdriver.Chrome(options=opts)
     
 
-    def set_tkb_info(self, subject, classroom, sessions):
-        self.subject = subject
-        self.classroom = classroom
-        self.sessions = sessions
+    def set_booking_info(self, subject=None, classroom=None, sessions=None):
+        if subject is not None:
+            self.subject = subject
+        if classroom is not None:
+            self.classroom = classroom
+        if sessions is not None:
+            self.sessions = sessions
 
-    
+
+    def login_manually(self):
+        self.driver.get(HOME_PAGE)
+        while True:
+            try:
+                self.driver.switch_to.window(self.driver.window_handles[1])
+                self.driver.find_element(By.XPATH, LOGIN_STATUS_BUTTON)
+                self.driver.find_element(By.XPATH, LOGIN_STATUS_TEXT)
+                break
+            except:
+                pass
+        print('successfully loginned')
+
+
     def login(self, op_timeout=0.3):
         self.driver.get(HOME_PAGE)
 
@@ -69,31 +86,34 @@ class TKB_Agent:
     def book(self, op_timeout=0):
         # Select the subject
         time.sleep(op_timeout)
+        self.wait_value(self.driver, By.XPATH, SUBJECT_SELECT)
         subject_select = Select(self.driver.find_element(By.XPATH, SUBJECT_SELECT))
-        subject_select.select_by_index(int(self.subject.split(')')[0].strip('(')))
+        subject_select.select_by_index(self.subject + 1)
 
         # Select the latest date
         time.sleep(op_timeout)
+        self.wait_value(self.driver, By.XPATH, DATE_SELECT)
         date_select = Select(self.driver.find_element(By.XPATH, DATE_SELECT))
         date_select.select_by_index(len(date_select.options)-1)
 
         # Select the classroom
         time.sleep(op_timeout)
+        self.wait_value(self.driver, By.XPATH, CLASSROOM_SELECT)
         classroom_select = Select(self.driver.find_element(By.XPATH, CLASSROOM_SELECT))
-        classroom_select.select_by_index(int(self.classroom.split(')')[0].strip('(')))
+        classroom_select.select_by_index(self.classroom + 1)
 
         # Select the session
         time.sleep(op_timeout)
         self.wait_value(self.driver, By.ID, SESSION_TIME_DIV_ID)
 
         sessions_text = self.driver.find_element(By.ID, SESSION_TIME_DIV_ID).get_attribute('innerText')
-        sessions_to_reserve = [int(session.split(')')[0].strip('(')) for session in self.sessions]
         reserved_sessions = []
-        for session in sessions_to_reserve:
-            session_box = self.driver.find_elements(By.NAME, SESSION_TIME_NAME)[session-1]
+        for session in self.sessions:
+            self.wait_value(self.driver, By.NAME, SESSION_TIME_NAME)
+            session_box = self.driver.find_elements(By.NAME, SESSION_TIME_NAME)[session]
             if session_box.get_attribute('disabled') is None:
                 session_box.click()
-                reserved_sessions.append(sessions_text.split('\n')[session-1])
+                reserved_sessions.append(sessions_text.split('\n')[session])
         
         # Submit the form
         self.driver.find_element(By.XPATH, BOOK_BUTTON).click()
@@ -107,6 +127,71 @@ class TKB_Agent:
         return reserved_sessions
 
     
+    def update_tkb_data(self):
+        self.login_manually()
+        tkb_data = {
+            'subjects': [], 'classrooms': []
+        }
+
+        # Record all the subjects and choose the first subject for the following operations
+        self.wait_value(self.driver, By.XPATH, SUBJECT_SELECT)
+        subject_select = Select(self.driver.find_element(By.XPATH, SUBJECT_SELECT))
+        for subject in subject_select.options[1:]:
+            tkb_data['subjects'].append(subject.text)
+        subject_select.select_by_index(1)
+
+        # Only choosing one date first can we view the classroom informations
+        self.wait_value(self.driver, By.XPATH, DATE_SELECT)
+        date_select = Select(self.driver.find_element(By.XPATH, DATE_SELECT))
+        date_select.select_by_index(1)
+
+        # Choose each classroom, record them, and record their respective available sessions
+        self.wait_value(self.driver, By.XPATH, CLASSROOM_SELECT)
+        classroom_select = Select(self.driver.find_element(By.XPATH, CLASSROOM_SELECT))
+        for i, classroom in enumerate(classroom_select.options):
+            if i == 0:
+                continue
+
+            tkb_data['classrooms'].append([classroom.text, dict()])
+            
+            classroom_select.select_by_index(i)
+            self.wait_value(self.driver, By.XPATH, DATE_SELECT)
+            date_select = Select(self.driver.find_element(By.XPATH, DATE_SELECT))
+            for j, date_item in enumerate(date_select.options):
+                if j == 0:
+                    continue
+                
+                date_select.select_by_index(j)
+                print(i, j)
+                print(classroom.text, date_item.text)
+                self.wait_value(self.driver, By.ID, SESSION_TIME_DIV_ID)
+                sessions_text = self.driver.find_element(By.ID, SESSION_TIME_DIV_ID).get_attribute('innerText')
+                sessions_text = sessions_text.split('\n')[:-1]
+                
+                session_type = ''
+                if date_item.text[-1] == '一':
+                    session_type = 'weekday'
+                elif date_item.text[-1] == '六':
+                    session_type = 'saturday'
+                elif date_item.text[-1] == '日':
+                    session_type = 'sunday'
+                else:
+                    continue
+
+                tkb_data['classrooms'][-1][1][session_type] = []
+                for session in sessions_text:
+                    if session[-4:] == '己停課)':
+                        # The TKB's website used the character '己' instead of '已'
+                        tkb_data['classrooms'][-1][1][session_type].append([False, session])
+                    elif session[-4:] == '已滿場)' or session[-4:] == '已預約)':
+                        tkb_data['classrooms'][-1][1][session_type].append([True, session[:-8]])
+                    else:
+                        tkb_data['classrooms'][-1][1][session_type].append([True, session])
+
+        with open('src/gui/tkb_data_new.json', 'w', encoding='utf-8') as f:
+            json.dump(tkb_data, f, ensure_ascii=False, indent=4)
+
+
     def wait_value(self, driver, by_value, element_value, timeout=10):
         WebDriverWait(driver, timeout).until(EC.visibility_of_element_located((by_value, element_value)))
 
