@@ -1,0 +1,26 @@
+name: Auto packing
+on:
+    release:
+        types:
+            - published
+jobs:
+    auto_packing:
+        runs-on: ubuntu-latest
+        permissions:
+            statuses: write
+        steps:
+            - uses: actions/checkout@v2
+            - uses: actions/setup-python@v4
+              with:
+                python-version: '3.9' 
+            - run: |
+                pip3 install pyinstaller==5.13.2
+            - run: |
+                pyinstaller -F src/main.py
+                rm main.spec
+                rm -rf build
+                
+                cp -r src/ tkbBooking
+                mv dist/main tkbBooking/tkbBooking
+                rm -rf dist
+                
