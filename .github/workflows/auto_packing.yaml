@@ -26,9 +26,13 @@ jobs:
               with:
                 title: 'build: auto-packing the executable'
                 commit-message: 'build: auto-packing the executable'
+                id: cpr
                 base: main
                 delete-branch: true
 
-            - uses: pascalgn/automerge-action@v0.15.6
-              env:
-                GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+            - if: steps.cpr.outputs.pull-request-operation == 'created'
+              uses: peter-evans/enable-pull-request-automerge@v3
+              with:
+                # token: ${{ secrets.PAT }}
+                pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
+                merge-method: squash
