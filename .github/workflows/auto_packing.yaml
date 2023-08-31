@@ -23,10 +23,10 @@ jobs:
                 rm -rf dist
 
             - uses: peter-evans/create-pull-request@v5
+              id: cpr
               with:
                 title: 'build: auto-packing the executable'
                 commit-message: 'build: auto-packing the executable'
-                id: cpr
                 base: main
                 delete-branch: true
 
