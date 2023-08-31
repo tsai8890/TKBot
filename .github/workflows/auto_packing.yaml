@@ -6,9 +6,7 @@ on:
 jobs:
     auto_packing:
         runs-on: ubuntu-latest
-        permissions:
-            # Give the default GITHUB_TOKEN write permission
-            contents: write
+        permissions: write-all
         steps:
             - uses: actions/checkout@v3
             - uses: actions/setup-python@v4
@@ -28,7 +26,6 @@ jobs:
               with:
                 title: 'build: auto-packing the executable'
                 commit-message: 'build: auto-packing the executable'
-                token: "${{ secrets.GITHUB_TOKEN }}"
                 base: main
                 delete-branch: true
 
