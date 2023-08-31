@@ -2,14 +2,16 @@ name: Lint PR
 on: pull_request
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest 
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-python@v2
-    - run: pip install ruff
-    - run: |
-        ruff check --fix .
-    - uses: stefanzweifel/git-auto-commit-action@v4
-      with:
-        commit_message: 'style fixes by ruff'                 
+    lint:
+        runs-on: ubuntu-latest 
+        steps:
+            - uses: actions/checkout@v2
+            - uses: actions/setup-python@v4
+                with:
+                    python-version: '3.9' 
+            - run: pip3 install ruff==0.0.286
+            - run: |
+                ruff check --fix .
+            - uses: stefanzweifel/git-auto-commit-action@v4
+                with:
+                    commit_message: 'style fixes by ruff'                 
