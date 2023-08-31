@@ -15,9 +15,11 @@ jobs:
             - run: |
                 pip3 install pyinstaller==5.13.2
             - run: |
+                rm -rf tkbBooking
                 pyinstaller -F src/main.py
                 rm main.spec
                 rm -rf build
+
                 cp -r src/ tkbBooking
                 mv dist/main tkbBooking/tkbBooking
                 rm -rf dist
@@ -30,9 +32,11 @@ jobs:
                 base: main
                 delete-branch: true
 
+            - run: |
+                echo ${{ steps.cpr.outputs.pull-request-operation }}
+                
             - if: steps.cpr.outputs.pull-request-operation == 'created'
               uses: peter-evans/enable-pull-request-automerge@v3
               with:
-                # token: ${{ secrets.PAT }}
                 pull-request-number: ${{ steps.cpr.outputs.pull-request-number }}
                 merge-method: squash
