@@ -1,5 +1,7 @@
 name: Lint PR
-on: pull_request
+on: 
+    pull_request:
+        types: [opened, edited, reopened, synchronize]
 
 jobs:
     lint:
@@ -17,4 +19,4 @@ jobs:
                 ruff check --fix .
             - uses: stefanzweifel/git-auto-commit-action@v4
               with:
-                commit_message: 'style fixes by ruff'                 
+                commit_message: 'style fixes by ruff'         
