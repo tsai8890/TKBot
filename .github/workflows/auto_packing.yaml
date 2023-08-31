@@ -28,6 +28,7 @@ jobs:
               with:
                 title: 'build: auto-packing the executable'
                 commit-message: 'build: auto-packing the executable'
+                token: "${{ secrets.GITHUB_TOKEN }}"
                 base: main
                 delete-branch: true
 
