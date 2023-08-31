@@ -1,8 +1,11 @@
-name: Lint PR
-on: 
+name: Lint
+on:
     pull_request:
-        types: [opened, edited, reopened, synchronize]
-
+        types: 
+            - opened
+            - reopened
+            - edited
+            - synchronize
 jobs:
     lint:
         runs-on: ubuntu-latest 
