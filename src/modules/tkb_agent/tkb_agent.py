@@ -188,7 +188,7 @@ class TKB_Agent:
                     else:
                         tkb_data['classrooms'][-1][1][session_type].append([True, session])
 
-        with open('src/gui/tkb_data_new.json', 'w', encoding='utf-8') as f:
+        with open('modules/resources/tkb_data.json', 'w', encoding='utf-8') as f:
             json.dump(tkb_data, f, ensure_ascii=False, indent=4)
 
 

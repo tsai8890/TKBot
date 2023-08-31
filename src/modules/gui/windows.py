@@ -4,7 +4,7 @@ import PySimpleGUI as sg
 from datetime import datetime
 from datetime import date, timedelta
 
-import modules.globals as globals
+import modules.globals.globals as globals
 
 
 def after(target_time):
