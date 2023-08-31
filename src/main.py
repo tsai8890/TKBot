@@ -3,7 +3,7 @@ sys.dont_write_bytecode = True
 
 from modules.gui.windows import main_loop
 from modules.tkb_agent.tkb_agent import TKB_Agent
-import modules.globals as globals
+import modules.globals.globals as globals
 
 
 def main():
