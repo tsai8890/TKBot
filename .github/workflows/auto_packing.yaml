@@ -29,13 +29,8 @@ jobs:
                 title: 'build: auto-packing the executable'
                 commit-message: 'build: auto-packing the executable'
                 delete-branch: true
-
             - uses: pascalgn/automerge-action@v0.15.6
               env:
                 GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
             
-            # - uses: stefanzweifel/git-auto-commit-action@v4
-            #   with:
-            #     branch: main
-            #     commit_message: 'auto-packing for the executable'
-            #     push_options: '--force'
+
