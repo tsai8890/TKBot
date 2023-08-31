@@ -5,7 +5,8 @@ on:
             - published
 jobs:
     auto_packing:
-        runs-on: ubuntu-latest
+        # for M1 MAC users
+        runs-on: [macOS, ARM64]
         permissions: write-all
         steps:
             - uses: actions/checkout@v3
