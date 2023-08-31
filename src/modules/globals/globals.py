@@ -4,7 +4,7 @@ import json
 def init_globals():
     # tkb_data
     global tkb_data
-    file = open('modules/gui/tkb_data.json')
+    file = open('modules/resources/tkb_data.json')
     tkb_data = json.load(file)
 
     global MAX_SESSIONS
