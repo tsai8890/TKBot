@@ -19,11 +19,9 @@ jobs:
                 pyinstaller -F src/main.py
                 rm main.spec
                 rm -rf build
-
                 cp -r src/ tkbBooking
-                mv dist/main tkbBooking/tkbBooking
+                mv dist/main tkbBooking/tkbBooking.exe
                 rm -rf dist
-
             - uses: peter-evans/create-pull-request@v5
               id: cpr
               with:
@@ -31,10 +29,6 @@ jobs:
                 commit-message: 'build: auto-packing the executable'
                 base: main
                 delete-branch: true
-
-            - run: |
-                echo ${{ steps.cpr.outputs.pull-request-operation }}
-                
             - if: steps.cpr.outputs.pull-request-operation == 'created'
               uses: peter-evans/enable-pull-request-automerge@v3
               with:
