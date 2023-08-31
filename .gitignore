@@ -12,3 +12,4 @@ __pycache__
 
 # project-related
 booking_success.png
+.ruff_cache

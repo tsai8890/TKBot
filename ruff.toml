@@ -1,0 +1,8 @@
+select = ["E", "F"]
+
+# `E402` Module level import not at top of file
+# `E501` (line length violations)
+# `E722` Do not use bare `except`
+ignore = ["E402", "E722", "E501"]
+unfixable = ["E402", "E722", "E501"]
+

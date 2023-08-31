@@ -1,0 +1,22 @@
+name: Lint PR
+on: 
+    pull_request:
+        types: [opened, edited, reopened, synchronize]
+
+jobs:
+    lint:
+        runs-on: ubuntu-latest 
+        permissions:
+            # Give the default GITHUB_TOKEN write permission
+            contents: write
+        steps:
+            - uses: actions/checkout@v2
+            - uses: actions/setup-python@v4
+              with:
+                python-version: '3.9' 
+            - run: pip3 install ruff==0.0.286
+            - run: |
+                ruff check --fix .
+            - uses: stefanzweifel/git-auto-commit-action@v4
+              with:
+                commit_message: 'style fixes by ruff'         

@@ -102,7 +102,7 @@ def main_loop(tkb_agent):
                 if i < len(globals.tkb_data['classrooms'][classroom_id][1][day_key]):
                     window[f'session_{i}'].update(
                         text=globals.tkb_data['classrooms'][classroom_id][1][day_key][i][1],
-                        disabled=(globals.tkb_data['classrooms'][classroom_id][1][day_key][i][0] == False),
+                        disabled=(globals.tkb_data['classrooms'][classroom_id][1][day_key][i][0] is False),
                         visible=True, value=False
                     )
                 else:
@@ -137,7 +137,7 @@ def main_loop(tkb_agent):
                 if len(reserved_sessions) != 0:
                     print(f'預約成功: {reserved_sessions}')
                 else:
-                    print(f'預約失敗: 已經全數額滿')
+                    print('預約失敗: 已經全數額滿')
             break
 
     window.close()
