@@ -12,27 +12,21 @@ def after(target_time):
     return current_time >= target_time
 
 
-def create_window():
+def create_window(subjects, dates, classrooms, max_sessions):
     subject_l = [
         sg.Text('輸入上課資訊', size=(15, 1), font=30),
-        sg.Combo(
-            globals.tkb_data['subjects'], key='subject', 
-            size=(15, 10), font=15
-        )
+        sg.Combo(subjects, key='subject', size=(15, 10), font=15)
     ]
 
     date_l = [
         sg.Text('欲上課日期', size=(15, 1), font=20),
-        sg.Combo(
-            [f'{date.today() + timedelta(days=7)}'],
-            key='date', default_value=f'{date.today() + timedelta(days=7)}', size=(15, 10), font=20
-        )
+        sg.Combo(dates, key='date', size=(15, 10), font=20)
     ]
 
     classroom_l = [
         sg.Text('上課教室', size=(15, 1), font=20),
         sg.Combo(
-            [classroom[0] for classroom in globals.tkb_data['classrooms']], key='classroom',
+            [classroom[0] for classroom in classrooms], key='classroom',
             size=(20, 10), font=20, enable_events=True
         )
     ]
@@ -43,7 +37,7 @@ def create_window():
     
     session_right_column = [
         [sg.Checkbox('', key=f'session_{i}', font=30, visible=False)]
-        for i in range(globals.MAX_SESSIONS)
+        for i in range(max_sessions)
     ]
     
     session_l = [
@@ -73,14 +67,18 @@ def create_window():
 
 def main_loop(tkb_agent):
     midnight = datetime.now() + timedelta(days=1)
-    midnight = midnight.replace(
-        hour=0, minute=0, second=0,
-        microsecond=0
+    midnight = midnight.replace(hour=0, minute=0, second=0, microsecond=0)
+    reserve_date = date.today() + timedelta(days=7)
+
+    # tkb_agent.login()
+    reserved = False
+    window = create_window(
+        globals.tkb_data['subjects'],
+        [f'{reserve_date}'],
+        globals.tkb_data['classrooms'],
+        globals.MAX_SESSIONS
     )
 
-    tkb_agent.login()
-    reserved = False
-    window = create_window()
     while True:
         event, values = window.read(timeout=20)
         if event == sg.WIN_CLOSED or event == 'Exit':
@@ -88,9 +86,9 @@ def main_loop(tkb_agent):
 
         if event == 'classroom':
             day_key = 'weekday'
-            if midnight.weekday() == 5:
+            if reserve_date.weekday() == 5:
                 day_key = 'saturday'
-            elif midnight.weekday() == 6:
+            elif reserve_date.weekday() == 6:
                 day_key = 'sunday'
             
             classroom_id = -1
