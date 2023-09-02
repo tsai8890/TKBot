@@ -135,6 +135,5 @@ def main_loop(tkb_agent):
                     print(f'預約成功: {reserved_sessions}')
                 else:
                     print('預約失敗: 已經全數額滿')
-            break
 
     window.close()
