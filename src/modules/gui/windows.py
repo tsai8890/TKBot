@@ -76,7 +76,7 @@ def main_loop(tkb_agent):
         globals.MAX_SESSIONS
     )
 
-    # tkb_agent.login()
+    tkb_agent.login()
     reserved = False
     while True:
         event, values = window.read(timeout=20)
