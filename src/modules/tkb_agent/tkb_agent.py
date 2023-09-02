@@ -137,7 +137,7 @@ class TKB_Agent:
         self.wait_value(self.driver, By.XPATH, tkb_layout.SUBJECT_SELECT)
         subject_select = Select(self.driver.find_element(By.XPATH, tkb_layout.SUBJECT_SELECT))
         for subject in subject_select.options[1:]:
-            tkb_data['subjects'].append(subject.text)
+            tkb_data['subjects'].append(subject.text.split('-->')[0])
         subject_select.select_by_index(1)
 
         # Only choosing one date first can we view the classroom informations
