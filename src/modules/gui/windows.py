@@ -14,12 +14,12 @@ def after(target_time):
 
 def create_window(subjects, dates, classrooms, max_sessions):
     subject_l = [
-        sg.Text('輸入上課資訊', size=(15, 1), font=30),
+        sg.Text('上課科目', size=(15, 1), font=30),
         sg.Combo(subjects, key='subject', size=(15, 10), font=15)
     ]
 
     date_l = [
-        sg.Text('欲上課日期', size=(15, 1), font=20),
+        sg.Text('上課日期', size=(15, 1), font=20),
         sg.Combo(dates, key='date', size=(15, 10), font=20)
     ]
 
@@ -27,12 +27,12 @@ def create_window(subjects, dates, classrooms, max_sessions):
         sg.Text('上課教室', size=(15, 1), font=20),
         sg.Combo(
             [classroom[0] for classroom in classrooms], key='classroom',
-            size=(20, 10), font=20, enable_events=True
+            size=(15, 10), font=20, enable_events=True
         )
     ]
 
     session_left_column = [
-        [sg.Text('欲上課時間', size=(14, 1), font=20)]
+        [sg.Text('上課時間', size=(13, 1), font=20)]
     ]
     
     session_right_column = [
@@ -69,9 +69,6 @@ def main_loop(tkb_agent):
     midnight = datetime.now() + timedelta(days=1)
     midnight = midnight.replace(hour=0, minute=0, second=0, microsecond=0)
     reserve_date = date.today() + timedelta(days=7)
-
-    # tkb_agent.login()
-    reserved = False
     window = create_window(
         globals.tkb_data['subjects'],
         [f'{reserve_date}'],
@@ -79,6 +76,8 @@ def main_loop(tkb_agent):
         globals.MAX_SESSIONS
     )
 
+    tkb_agent.login()
+    reserved = False
     while True:
         event, values = window.read(timeout=20)
         if event == sg.WIN_CLOSED or event == 'Exit':
