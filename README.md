@@ -47,17 +47,17 @@
 
 1. Clone the repo
     ```bash
-    $ git clone https://github.com/tsai8890/TKBot.git
+    git clone https://github.com/tsai8890/TKBot.git
     ```
 2. Install python packages
     ```bash
-    $ cd TKBot/src
-    $ pip3 install -r requirements
+    cd TKBot/src
+    pip3 install -r requirements.txt
     ```
 3. Copy the config template
     ```bash
-    $ cd TKBot/src
-    $ cp .env.default .env
+    cd TKBot/src
+    cp .env.default .env
     ```
 4. Enter your username and password in .env
     ```env
