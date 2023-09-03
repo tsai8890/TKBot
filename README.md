@@ -61,8 +61,8 @@
     ```
 4. Enter your username and password in .env
     ```env
-    username=[your username]
-    password=[your password]
+    USERNAME=[your username]
+    PASSWORD=[your password]
     ```
     
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -73,8 +73,8 @@
 ## Usage
 1. Run the app
     ```bash
-    $ cd TKBot/src
-    $ python3 main.py
+    cd TKBot/src
+    python3 main.py
     ```
 <br>
 
