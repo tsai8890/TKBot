@@ -18,7 +18,7 @@
   <a href="#contact">Contact</a> •
   <a href="#acknowledgments">Acknowledgments</a>
 </p>
-
+<br>
 
 
 <!-- ABOUT THE PROJECT -->
@@ -80,7 +80,7 @@
 
 2. After you launch the app, it will first try to login with your username and password
 
-    <img src=images/readme/login.png width=400 height=270>
+    <img src=images/readme/login.png width=700 height=400>
     
     > **Note**
     > If the login process is blocked by the website, then you would be required to login manually.
@@ -89,17 +89,17 @@
 
 3. After the app successfully logged in, a window will pop up for the further reservation.
 
-    <img src=images/readme/window_popup.png width=300 height=270>
+    <img src=images/readme/window_popup.png width=480 height=430>
 <br>
   
 4. Select each field, then click `預約`
 
-    <img src=images/readme/window_reserve.png width=300 height=290>
+    <img src=images/readme/window_reserve.png width=480 height=480>
 <br>
 
 5. After you click `預約`, it will show `已預約，等待中 ...`. You can change the reservation information before 00:00, after 00:00, the app will immediately book the specified sessions
 
-    <img src=images/readme/reserve_waiting.png width=300 height=300>
+    <img src=images/readme/reserve_waiting.png width=480 height=480>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
