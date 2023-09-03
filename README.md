@@ -112,6 +112,7 @@
 - [ ] Add a `update tkb data` button into the GUI interface
   - [x] update function
   - [ ] update button
+- [ ] Add a unique project icon
 - [ ] Support multiple users at once
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
